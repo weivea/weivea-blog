@@ -2,6 +2,7 @@
  * Created by weijianli on 17/1/4.
  */
 "use strict";
+const co = require('co');
 const fs = require('fs');
 const path = require('path');
 const MarkdownIt = require('markdown-it'),
@@ -12,15 +13,15 @@ const MarkdownIt = require('markdown-it'),
     linkify:      true,        // Autoconvert URL-like text to links
 
   });
-async function getArticle(req) {
+const getArticle = co.wrap(function *(req) {
   var re;
   if(req.query.title){
-    re = await readAticle(req.query.title);
+    re = yield readAticle(req.query.title);
     return re;
   }else {
     throw `queryUrl:${req.originalUrl}; param of title does not have value`;
   }
-}
+});
 
 function readAticle(title) {
   return new Promise(function (resolve, rejsct) {

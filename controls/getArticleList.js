@@ -2,18 +2,19 @@
  * Created by weijianli on 16/12/21.
  */
 "use strict";
+const co = require('co');
 const fs = require('fs');
 const path = require('path');
-async function getArticleList(req) {
+const getArticleList = co.wrap(function* (req) {
   var re;
-  re = await readaAticles();
+  re = yield readaAticles();
   if(req.query.tag != 'all'){
     re.filter(function (item) {
       return req.query.tag == item.tag
     })
   }
   return re;
-}
+})
 
 function readaAticles() {
   return new Promise(function (resolve, rejsct) {
